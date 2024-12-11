@@ -1,0 +1,21 @@
+server:
+  port: 8010
+spring:
+  application:
+    name: order-server
+  cloud:
+    nacos:
+      serverAddr: 127.0.0.1:8848
+      discovery:
+        server-addr: 127.0.0.1:8848
+  datasource:
+    username: root
+    password: root1234
+    url: jdbc:mysql://localhost:3306/seata_order?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    schema: classpath: sql/schema.sql
+    initialization-mode: never
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yaml

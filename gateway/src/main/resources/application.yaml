@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://json.schemastore.org/spring-boot-v2.json
+# 文件：gateway/src/main/resources/application.yaml
+server:
+  port: 8088
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: stock_route
+          uri: lb://stock-server
+          predicates:
+            - "Path=/stock/**"
+        - id: order_route
+          uri: lb://order-server
+          predicates:
+            - "Path=/order/**"
+  config:
+    import:
+      - "optional:nacos:${spring.application.name}.yaml"
+
