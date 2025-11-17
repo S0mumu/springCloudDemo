@@ -8,6 +8,38 @@ spring:
       serverAddr: 127.0.0.1:8848
       discovery:
         server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+  datasource:
+    username: root
+    password: root1234
+    url: jdbc:mysql://localhost:3306/seata_stock?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  sql:
+    init:
+      schema-locations: classpath:sql/schema.sql
+      mode: never
   config:
     import:
       - optional:nacos:${spring.application.name}.yaml
+
+author: stock
+
+#设置mybatis
+mybatis:
+  mapper-locations: classpath:com/demo/stock/mapper/*Mapper.xml
+  #config-location: classpath:mybatis-config.xml
+  typeAliasesPackage: com.demo.stock.pojo
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+# file模式的配置
+seata:
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-group
+  service:
+    vgroup-mapping:
+      stock-server-group: default
+    grouplist:
+      default: 127.0.0.1:8091

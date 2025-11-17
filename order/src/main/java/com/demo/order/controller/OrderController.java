@@ -1,6 +1,8 @@
 package com.demo.order.controller;
 
-import com.demo.order.feignService.StockFeignSerivce;
+import com.demo.order.feignService.StockFeignService;
+import com.demo.order.pojo.Order;
+import com.demo.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -15,18 +17,23 @@ public class OrderController {
 
     @Autowired
     RestTemplate restTemplate;
-
     @Autowired
-    StockFeignSerivce feignSerivce;
-
+    StockFeignService stockFeignService;
     @Value("${author}")
     private String author;
 
+    @Autowired
+    OrderService orderService;
+
+    // 插入订单信息
     @RequestMapping("/add")
     public String add(){
-        System.out.println("下单成功!");
-//        String msg = restTemplate.getForObject("http://stock-server:8011/stock/reduce", String.class);
-        String msg = feignSerivce.reduce();
-        return author+"Hello World"+msg;
+        Order order=new Order();
+        order.setProductId(9);
+        order.setStatus(0);
+        order.setTotalAmount(100);
+
+        orderService.create(order);
+        return "下单成功";
     }
 }

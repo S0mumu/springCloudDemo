@@ -11,11 +11,33 @@ spring:
   datasource:
     username: root
     password: root1234
-    url: jdbc:mysql://localhost:3306/seata_order?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&
+    url: jdbc:mysql://localhost:3306/seata_order?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-    schema: classpath: sql/schema.sql
-    initialization-mode: never
+    type: com.alibaba.druid.pool.DruidDataSource
+  sql:
+    init:
+      schema-locations: classpath:sql/schema.sql
+      mode: never
   config:
     import:
       - optional:nacos:${spring.application.name}.yaml
+
+author: order
+
+#设置mybatis
+mybatis:
+  mapper-locations: classpath:com/demo/order/mapper/*Mapper.xml
+  #config-location: classpath:mybatis-config.xml
+  typeAliasesPackage: com.demo.order.pojo
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+# file模式的配置
+seata:
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-group
+  service:
+    vgroup-mapping:
+      order-server-group: default
+    grouplist:
+      default: 127.0.0.1:8091
